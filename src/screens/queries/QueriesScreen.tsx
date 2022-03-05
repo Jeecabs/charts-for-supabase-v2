@@ -10,7 +10,7 @@ import {
 } from '../../utils';
 
 type Props = RootStackScreenProps<'Queries'>;
-const QueryCollectionScreen = ({ navigation }: Props) => {
+const QueriesScreen = ({ navigation }: Props) => {
   const connConfig = useSetting(AppSetting.SUPABASE_CONFIG);
 
   useEffect(() => {
@@ -53,4 +53,4 @@ const QueryCollectionScreen = ({ navigation }: Props) => {
   );
 };
 
-export default QueryCollectionScreen;
+export default QueriesScreen;
