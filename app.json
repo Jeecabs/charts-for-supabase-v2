@@ -1,13 +1,17 @@
 {
   "expo": {
-    "name": "Charts",
-    "slug": "sbcharts",
+    "name": "SupaCharts",
+    "slug": "supacharts",
     "version": "2.0",
     "icon": "./assets/images/icon.png",
     "scheme": "sbcharts",
     "userInterfaceStyle": "automatic",
     "backgroundColor": "#222B45",
-    "platforms": ["android", "ios", "web"],
+    "platforms": [
+      "android",
+      "ios",
+      "web"
+    ],
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
@@ -17,14 +21,18 @@
       "fallbackToCacheTimeout": 5000,
       "enabled": true
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
-      "buildNumber": "1",
+      "buildNumber": "2",
       "supportsTablet": true,
-      "bundleIdentifier": "com.mrarich.charts",
+      "bundleIdentifier": "com.ljacobs.charts",
       "appStoreUrl": "https://apps.apple.com/app/apple-store/id1612680145?pt=117925864&ct=aj&mt=8",
       "infoPlist": {
-        "LSApplicationQueriesSchemes": ["twitter"]
+        "LSApplicationQueriesSchemes": [
+          "twitter"
+        ]
       },
       "config": {
         "usesNonExemptEncryption": false
@@ -36,23 +44,31 @@
         "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#222B45"
       },
-      "permissions": ["READ_EXTERNAL_STORAGE", "WRITE_EXTERNAL_STORAGE"],
+      "permissions": [
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
+      ],
       "package": "rich.alex.charts",
-      "versionCode": 5
+      "versionCode": 6
     },
     "web": {
       "favicon": "./assets/images/favicon.png",
       "build": {
         "babel": {
-          "include": ["@ui-kitten/components"]
+          "include": [
+            "@ui-kitten/components"
+          ]
         }
       }
     },
+    "plugins": [
+      "@config-plugins/android-jsc-intl"
+    ],
     "extra": {
       "eas": {
-        "projectId": "d2681c33-6cce-498c-8f3d-3048a29c6050"
+        "projectId": "a0bec425-4ba2-4deb-845d-e9d6a78d285c"
       }
     },
-    "plugins": ["@config-plugins/android-jsc-intl"]
+    "owner": "lohanjacobs"
   }
 }
