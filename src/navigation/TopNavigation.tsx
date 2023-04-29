@@ -44,7 +44,7 @@ export default <T extends NativeStackHeaderProps>(topInsets: number) =>
       return undefined;
     }
 
-    let BackAction: RenderProp = () => (
+    let BackAction: RenderProp<unknown> = () => (
       <TopNavigationAction
         icon={(props) => <Icon {...props} name={Icons.menu} />}
         onPress={() => navigation.dispatch(DrawerActions.openDrawer())}

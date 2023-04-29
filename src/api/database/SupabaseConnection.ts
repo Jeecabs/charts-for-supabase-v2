@@ -1,13 +1,23 @@
-import { OpenAPIV2 } from 'openapi-types';
+import { OpenAPIV2 } from "openapi-types";
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { PostgrestBuilder, PostgrestFilterBuilder } from '@supabase/postgrest-js';
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {
+  PostgrestBuilder,
+  PostgrestFilterBuilder,
+} from "@supabase/postgrest-js";
+import { createClient, SupabaseClient } from "@supabase/supabase-js";
 
 import {
-    formatParam, formatParams, handleError, log, Modifier, ModifierType, QueryInfo, QueryReturnType,
-    QueryType
-} from '../../utils';
+  formatParam,
+  formatParams,
+  handleError,
+  log,
+  Modifier,
+  ModifierType,
+  QueryInfo,
+  QueryReturnType,
+  QueryType,
+} from "../../utils";
 
 export const DEFAULT_TABLE_LIMIT = 20;
 
@@ -16,25 +26,30 @@ export class SupabaseConnection {
 
   constructor(url: string, key: string) {
     this.supabase = createClient(url, key, {
-      localStorage: AsyncStorage,
-      shouldThrowOnError: true,
+      auth: {
+        storage: AsyncStorage,
+      }
     });
   }
 
-  destroy() {
-    this.supabase.auth.session() && this.supabase.auth.signOut();
+  async destroy() {
+    const session = await this.supabase.auth.getSession();
+    if (session.data.session) {
+      this.supabase.auth.signOut();
+    }
   }
 
   async signIn(email: string, password: string) {
+    const currentUser = await this.supabase.auth.getUser()
     if (
       !password ||
-      this.supabase.auth.user()?.email?.toLowerCase() === email.toLowerCase()
+      currentUser?.data.user?.email?.toLowerCase() === email.toLowerCase()
     ) {
       // already signed in or password not set
       return;
     }
-    log('Signing in to supabase.', { email });
-    const { error } = await this.supabase.auth.signIn({ email, password });
+    log("Signing in to supabase.", { email });
+    const { error } = await this.supabase.auth.signInWithPassword({ email, password });
     if (error) {
       throw error;
     }
@@ -48,14 +63,15 @@ export class SupabaseConnection {
   }
 
   get user() {
-    return this.supabase.auth.user();
+    return this.supabase.auth.getUser();
   }
 
   query(
     qi: QueryInfo,
     schema: OpenAPIV2.Document | undefined
   ): PostgrestBuilder<Record<string, unknown>> {
-    let stmt: PostgrestFilterBuilder<Record<string, unknown>>;
+    // TODO Complete the types for Supabase V2
+    let stmt: PostgrestFilterBuilder<any, any, any>;
     let columnInfos: Record<string, OpenAPIV2.SchemaObject> | undefined;
     if (qi.type === QueryType.RPC) {
       const params = formatParams(qi.rpc, qi.params, schema);
@@ -87,14 +103,14 @@ export class SupabaseConnection {
   }
 
   _applyModifier(
-    stmt: PostgrestFilterBuilder<Record<string, unknown>>,
+    stmt: PostgrestFilterBuilder<any, any, any>,
     modifier: Modifier,
     columnInfos: Record<string, OpenAPIV2.SchemaObject> | undefined
-  ): PostgrestFilterBuilder<Record<string, unknown>> {
+  ): PostgrestFilterBuilder<any, any, any> {
     const info =
-      'column' in modifier ? columnInfos?.[modifier.column] : undefined;
+      "column" in modifier ? columnInfos?.[modifier.column] : undefined;
     const formattedValue =
-      'value' in modifier ? formatParam(info, modifier.value) : undefined;
+      "value" in modifier ? formatParam(info, modifier.value) : undefined;
 
     switch (modifier.type) {
       case ModifierType.EQ:

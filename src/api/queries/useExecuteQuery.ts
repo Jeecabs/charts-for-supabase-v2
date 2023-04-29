@@ -11,7 +11,7 @@ export const makeQueryKey = (id: string) => ['query', id];
 
 export const useExecuteQuery = (
   id: string
-): BaseGetterReturn<PostgrestResponse<Record<string, unknown>> | undefined> => {
+) => {
   const queryClient = useQueryClient();
   const schema = useSchema();
   const qi = useQuery(id);
